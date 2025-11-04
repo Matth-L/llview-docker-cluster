@@ -1,3 +1,0 @@
-# start monitor daemon
-* * * * * . ~/.llview_server_rc ; perl "$LLVIEW_HOME/da/workflows/server/crontab/serverAll.pl"
-
