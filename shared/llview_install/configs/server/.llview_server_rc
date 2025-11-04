@@ -12,7 +12,7 @@
 export LLVIEW_SYSTEMNAME="system"
 
 # Folder locations
-export LLVIEW_HOME="/Server/LLview"
+export LLVIEW_HOME="/Server/LLView"
 export LLVIEW_DATA="/data"
 export LLVIEW_CONF="/Server/configs"
 

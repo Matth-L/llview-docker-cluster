@@ -14,12 +14,14 @@ DEST_DIR="~/"
 ACCOUNTMAP_FILE="/Server/accountmap.xml"
 LLVIEW_DATA="/data"
 LLVIEW_SYSTEMNAME="system"
-CRONTAB_FILE="/Server/LLview/da/workflows/server/crontab/crontab.add"
-
+CRONTAB_FILE="/Server/LLView/da/workflows/server/crontab/crontab.add"
+UPDATEDB_SCRIPT="/Server/LLView/scripts/updatedb"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
+
+echo "---------------Server-------------------"
 
 log "Copying .llview_server_rc"
 docker exec $CONTAINER bash -c "cp $SRC_FILE $DEST_DIR"
@@ -31,7 +33,7 @@ docker exec $CONTAINER bash -c "cp $ACCOUNTMAP_FILE $LLVIEW_DATA/$LLVIEW_SYSTEMN
 log "Copy of the accountmap DONE"
 
 log "Creating the database using LLview updatedb script"
-docker exec $CONTAINER bash -c "source ~/.llview_server_rc && /Server/LLview/scripts/updatedb"
+docker exec $CONTAINER bash -c "source ~/.llview_server_rc && $UPDATEDB_SCRIPT"
 log "Database creation DONE"
 
 log "Launching Crontab..."

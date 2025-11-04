@@ -10,11 +10,13 @@ set -euo pipefail
 CONTAINER="slurmctld"
 SRC_FILE="/Remote/configs/remote/.llview_remote_rc"
 DEST_DIR="~/"
-CRONTAB_FILE="/Remote/LLview/da/workflows/remote/crontab/crontab.add"
+CRONTAB_FILE="/Remote/LLView/da/workflows/remote/crontab/crontab.add"
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
+
+echo "---------------Remote-------------------"
 
 log "Copying llview_remote_rc (source file)"
 docker exec "$CONTAINER" bash -c "cp $SRC_FILE $DEST_DIR"
