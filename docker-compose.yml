@@ -20,8 +20,6 @@ services:
     command: slurmdbd
     build:
       context: .
-      args:
-        SLURM_TAG: ${SLURM_TAG}
     container_name: slurmdbd
     hostname: slurmdbd
     privileged: true
