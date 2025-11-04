@@ -1,0 +1,190 @@
+services:
+  mysql:
+    image: mariadb
+    hostname: mysql
+    container_name: mysql
+    privileged: true
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: slurm_acct_db
+      MYSQL_USER: slurm
+      MYSQL_PASSWORD: password
+    volumes:
+      - var_lib_mysql:/var/lib/mysql
+    networks:
+      - slurm-network
+
+  # Contains the slurm database
+  slurmdbd:
+    image: slurm-docker-cluster
+    command: slurmdbd
+    build:
+      context: .
+      args:
+        SLURM_TAG: ${SLURM_TAG}
+    container_name: slurmdbd
+    hostname: slurmdbd
+    privileged: true
+    volumes:
+      - etc_munge:/etc/munge
+      - var_log_slurm:/var/log/slurm
+      - var_spool_slurm:/var/spool/slurmctld
+    expose:
+      - "6819"
+    depends_on:
+      - mysql
+    networks:
+      - slurm-network
+
+  # The login node, where the job can be run for the slurm cluster
+  # Also the remote part of llview, the remote part gather metrics from slurm
+  slurmctld:
+    image: remote
+    command: slurmctld
+    container_name: slurmctld
+    hostname: slurmctld
+    privileged: true
+    volumes:
+      - etc_munge:/etc/munge
+      - var_log_slurm:/var/log/slurm
+      - ./shared/llview_install:/Remote
+      - ./shared/compute:/shared/compute
+      - ./shared/remote_server:/shared/remote_server
+    expose:
+      - "6817"
+    depends_on:
+      - "slurmdbd"
+    networks:
+      - slurm-network
+
+
+# The server part -> where the metrics are stored by LLView using a Sqlite3 DB
+  server:
+    image: server
+    command: crond -n
+    container_name: server
+    hostname: server
+    privileged: true
+    volumes:
+      - ./shared/llview_install:/Server
+      - ./shared/remote_server:/shared/remote_server
+      - ./shared/server_web/data:/data/system/tmp/jobreport/data
+    depends_on:
+      - "slurmdbd"
+    networks:
+      - slurm-network
+
+# Prometheus : LLview cannot fetch metrics without it
+  prometheus:
+    image: prom/prometheus
+    hostname : prometheus
+    container_name: prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    ports:
+      - 9090:9090
+    networks:
+      - slurm-network
+
+
+# For now, we use a basic web server that is available on localhost:8080
+# There is no need for this web server to be https as this project aims to be a
+# proof of concept
+  web_server:
+    image: web_server
+    container_name: web_server
+    hostname: myapp.mydomain.com
+    privileged: true
+    volumes:
+      - ./shared/JURI/:/var/www/html/
+      - ./shared/server_web/data:/var/www/html/data
+    ports:
+      - 8080:80
+    depends_on:
+      - "slurmdbd"
+    networks:
+      - slurm-network
+
+  ############################################################################
+  ############################################################################
+  ############################################################################
+  ##### COMPUTE NODE
+  ##### c1 & c2 & c3 are the compute node, nothings happens there
+  ##### except running the jobs set using the /scripts/launch_job.sh
+  ############################################################################
+  ############################################################################
+  ############################################################################
+  c1:
+    image: slurm-docker-cluster
+    command: slurmd
+    hostname: c1
+    container_name: c1
+    cpuset : "1"
+    privileged: true
+    volumes:
+      - etc_munge:/etc/munge
+      - var_log_slurm:/var/log/slurm
+      - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
+      - ./shared/compute:/shared/compute
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+    networks:
+      - slurm-network
+    environment: # fix dbus
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+
+  c2:
+    image: slurm-docker-cluster
+    command: slurmd
+    hostname: c2
+    container_name: c2
+    cpuset : "2"
+    privileged: true
+    volumes:
+      - etc_munge:/etc/munge
+      - var_log_slurm:/var/log/slurm
+      - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
+      - ./shared/compute:/shared/compute
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+    networks:
+      - slurm-network
+    environment: # fix dbus
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+
+
+  c3:
+    image: slurm-docker-cluster
+    command: slurmd
+    hostname: c3
+    container_name: c3
+    cpuset : "3"
+    privileged: true
+    volumes:
+      - etc_munge:/etc/munge
+      - var_log_slurm:/var/log/slurm
+      - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
+      - ./shared/compute:/shared/compute
+    expose:
+      - "6818"
+    depends_on:
+      - "slurmctld"
+    networks:
+      - slurm-network
+    environment: # fix dbus
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+
+volumes:
+  etc_munge:
+  slurm_jobdir:
+  var_lib_mysql:
+  var_log_slurm:
+  var_run_slurm:
+  var_spool_slurm:
+networks:
+  slurm-network:
+    driver: bridge

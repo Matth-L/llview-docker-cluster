@@ -1,0 +1,8 @@
+# This file is used for the configuration of the Prometheus Server,
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: node-compute
+    static_configs:
+      - targets: ["c1:9100", "c2:9100", "c3:9100"]

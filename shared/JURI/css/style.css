@@ -1,0 +1,945 @@
+/* 
+* Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+* This file is part of JURI. 
+*
+* This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+*
+* Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+*
+* Contributors:
+*    Sebastian Lührs (Forschungszentrum Juelich GmbH) 
+*    Filipe Guimarães (Forschungszentrum Juelich GmbH)   
+*/
+:root {
+  --fzj-color-blue:  #023d6b;
+  --fzj-color-lightblue:  #adbde3;
+  --fzj-color-gray:  #ebebeb;
+  --fzj-color-yellow:  #faeb5a;
+  --fzj-color-red:  #eb5f73;
+  --fzj-color-green:  #b9d25f;
+  --fzj-color-violet:  #af82b9;
+  --fzj-color-orange:  #fab45a;
+  /* Refresh button options: */
+  --time: 60s;
+  --size: 32px;
+  --ring-size: 6px;
+}
+
+body {
+  overflow: auto;
+  font-family: Weissenhof Grotesk,Helvetica Neue,Arial,Helvetica,sans-serif;
+  overflow-y: hidden;
+}
+
+a {
+  color: var(--fzj-color-blue);
+}
+
+/* Header and navigation layout */
+#header {
+  position: relative;
+  border: none;
+  background-color: var(--fzj-color-blue);
+  color: #ffffff; 
+  border-bottom: 1px solid #fff;
+  padding: 0;   
+  height: 37px;
+  flex-wrap: nowrap;
+}
+
+#institution_logo {
+  height: 50px;
+  width: 270px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+#title_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+#title {
+  height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  align-self: center;
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  & > div {
+    align-items: center;
+    display: flex;
+    font-size: min(1.6cqw, 1em);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+#title > .dropdown-toggle {
+  cursor: pointer;
+}
+
+#title .dropdown-menu a {
+  text-decoration: none; 
+  img {
+    vertical-align: middle;
+    background-color: white;
+    border-radius: 50%;
+    height: 27px;
+    padding: 3px;
+  }
+  span {
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+}
+
+#title .dropdown-toggle::after {
+  vertical-align: 0.1em;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg) translateY(0.1em);
+}
+
+#system {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  & > a, button a {
+    font-weight: bold;
+    text-transform: capitalize;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    font-size: min(1.6cqw, 1em);
+    white-space: nowrap;
+    overflow: hidden;
+    height: 100%;
+  }
+  & img {
+    height: 30px;
+    padding-right: 5px;
+  }
+}
+
+#system_picture {
+  align-self: center;
+}
+
+#logo {
+  align-self: center;
+}
+/* Buttons on header (Home, auto-refresh and presentation) */
+.button {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: flex;
+  align-self: center;
+  font-size: 0.8em;
+  width: var(--size);
+  height: var(--size);
+  margin: 0;
+  margin-left: 5px;
+  margin-right: 5px;
+  position: relative;
+}
+.button .outer-circle, 
+.button .inner-circle {
+  z-index: 4;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+}
+.button .inner-circle  {
+  top: 50%;
+  left: 50%;
+  padding: 0;
+  width: calc(var(--size) - var(--ring-size));
+  height: calc(var(--size) - var(--ring-size));
+  margin-left: calc(-1*(var(--size) - var(--ring-size))/2);
+  margin-top: calc(-1*(var(--size) - var(--ring-size))/2);
+  border-radius: 100%;
+  background-color: var(--fzj-color-blue);
+  color: #ffffff;
+  text-align: center;
+  justify-content: center; /* center the content horizontally */
+  align-items: center; /* center the content vertically */
+}
+.button span {
+  padding: 0px;
+  margin-left: calc(-1*(var(--size) - var(--ring-size))/4);
+  margin-top: calc(-1*(var(--size) - var(--ring-size) + 5px)/4);
+  position: absolute;
+}
+.button > button.active {
+  border-style: inset !important;
+  background-color: var(--fzj-color-gray) !important;
+  color: #444 !important;
+}
+.button > button:focus {
+  outline: none;
+}
+.button .hold 
+{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+  border-radius: 100%;
+  background-color: var(--fzj-color-blue) /* #9A9A9A; */ /* Not-filled part of circle */
+}
+.button .fill, 
+.button .dot span 
+{
+  background-color: var(--fzj-color-yellow);  /* Filled part of circle */
+}
+.button .fill 
+{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  clip-path: polygon(50% 0, 0 0, 0 100%, 50% 100%);
+}
+.button .left .fill 
+{
+  z-index: 1;
+  animation: left var(--time) linear both;
+  animation-iteration-count: infinite;
+}
+@keyframes left {
+  0%{ transform: rotate(0deg); }
+  50%{ transform: rotate(180deg); }
+  100%{ transform: rotate(180deg); }
+}
+.button .right {
+  z-index: 3;
+  transform: rotate(180deg);
+}
+.button .right .fill {
+  z-index: 3;
+  animation: right var(--time) linear both;
+  animation-iteration-count: infinite;
+}
+@keyframes right {
+  0%{ transform: rotate(0deg); }
+  50%{ transform: rotate(0deg); }
+  100%{ transform: rotate(180deg); }
+}
+.slow-spin {
+  margin: auto;
+  display: block;
+  font-size: 1.0em;
+  animation: fa-spin 6s infinite linear;
+}
+/**** End auto-refresh button ****/
+/**** Auto-refresh counter ****/
+@property --num {
+  syntax: "<integer>";
+  initial-value: 60;
+  inherits: false;
+}
+
+#countsec {
+  animation: counter 60s linear;
+  animation-iteration-count: infinite;
+  counter-reset: num var(--num);
+  color: #fff;
+}
+#countsec::after {
+  content: counter(num);
+}
+
+@keyframes counter {
+  from {
+    --num: 60;
+  }
+  to {
+    --num: 0;
+  }
+}
+/**** End auto-refresh counter ****/
+
+
+/*** Alert banner with button ***/
+.alert {
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+  position: fixed;
+  top: 0;
+  z-index: 2000;
+  width: 100vw;
+  border-radius: 0rem 0rem 0.3rem 0.3rem;
+}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+}
+/*** End of Alert banner ***/
+
+#infotext, #optionsdiv {
+  margin-left: 15px;
+  margin-right: 15px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.8em;
+  background: var(--fzj-color-gray);
+  transform: translateY(-10px);
+  margin-top: 4px;  
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+#infotext > p {
+  margin: 5px;
+}
+
+#optionstable {
+  border: 1px solid black;
+  border-radius: 10px;
+  th {
+    background-color: #666;
+    color: white;
+    padding: 5px 10px 5px 10px;
+    border-radius: 9px 0 0 9px;
+    width: 100px;
+    text-wrap: wrap;
+  }
+  td {
+    text-align: left;
+    padding: 0 5px;
+  }
+  .optionname {
+    text-align: right;
+  }  
+  input {
+    vertical-align: middle;
+    margin-right: 5px;
+    accent-color: #666;
+
+    &:focus {
+      outline: none;
+    }
+    /* &:checked {
+      color: #666
+    } */
+  }
+  label {
+    vertical-align: middle;
+    margin: 2px 0 2px 0;
+  }  
+}
+
+@media (max-width: 575.98px) {
+  h2 {font-size: 1.3rem;}
+  footer {font-size: 0.7rem;}
+}
+
+#header h6 {
+  margin-bottom: 0.3rem;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+#header h2 {
+  flex-grow: 1;
+}
+
+#header h2 img {
+  height: 1.7em;
+}
+
+#header object {
+  width: 250px;
+  align-self: start;
+}
+
+#header button {
+  background-color: var(--fzj-color-blue);
+}
+
+#header button:active {
+  background-color: var(--fzj-color-gray);
+  & a {
+    color: #444 !important;
+  }
+}
+
+.navbar {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+nav {
+  margin-top: auto;
+  font-size: 0.9rem;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 35px;
+}
+
+nav li:hover {
+  background-color: var(--fzj-color-gray);
+  border-radius: 0.3rem 0.3rem 0rem 0rem;
+}
+
+.nav-link {
+  color: #ffffff ! important;
+  font-size: min(1.6cqw, 1em);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+nav li:hover > .nav-link {
+  color: var(--fzj-color-blue) ! important;
+}
+
+.nav-item.active > .nav-link {
+  color: var(--fzj-color-blue) ! important;
+}
+
+.nav-item.active {
+  background-color: #ffffff;
+  color: var(--fzj-color-blue);
+  border-radius: 0.3rem 0.3rem 0rem 0rem;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #000;
+  background-color: #e7e7e7;
+}
+
+.dropup .dropdown-menu {
+  margin: 0;
+}
+
+li > .dropdown-menu {
+  margin: 0;
+  border-top: none;
+  border-radius: 0 0.25rem 0.25rem 0.25rem;
+}
+
+.nav-item.active > .dropdown-menu {
+  left: -1px;
+}
+
+/* Main content layout */
+#main_content {
+  margin-top: 10px;
+  padding-top: 0;
+  font-size: 0.75rem;
+  overflow: auto;
+  display: grid;
+  grid-auto-rows: min-content;
+  outline: none;
+  height: 0; /* default size 0 while things are loading, before auto resizing */
+}
+
+/* if main contains a #tabs_scroll that comes before #main_content,
+   remove the padding from #main_content (no extra top space needed) */
+main:has(> #tabs_scroll ~ #main_content) > #main_content {
+  margin-top: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.loading {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  color: var(--fzj-color-blue);
+  z-index: 2000;
+  text-align: center;
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+.loading::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.loading span {display: inline-block;}
+
+/* Generic table layout */
+table {
+  width: 100%;
+  font-size: 0.75rem;
+  /* IMPORTANT: collapse give problems on top row and the sticky of thead borders doens't work */
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Selected row */
+tr.selected td {
+  background-color: var(--fzj-color-yellow) !important;
+  color: #000000 !important;
+}
+
+.table-hover {
+  border: none;
+  border-bottom: 1px solid rgb(222, 226, 230);
+}
+
+/* Reproducing behaviour of "collapse" by hand, removing duplicate borders */
+.table-hover tbody tr td:not(:last-child) {
+  border-bottom: none;
+  border-right: none;
+}
+
+/* .table-hover tbody tr:last-child td{
+  border-right: none;
+} */
+.table-hover tbody tr td:last-child{
+  border-bottom: none;
+}
+
+
+/* Hovered row */
+.table-hover tbody tr:hover td {
+  border-top: 1px double #444 !important;
+  border-bottom: 1px double #444 !important;
+}
+.table-hover tbody tr:hover td:first-child {
+  border-left: 1px double #444 !important;
+}
+.table-hover tbody tr:hover td:last-child {
+  border-right: 1px double #444 !important;
+}
+/* Removing top border of next row to avoid double borders on hover */
+.table-hover tbody tr:hover +tr td {
+  border-top: none !important;
+}
+/* Removing bottom border of table when last row is hovered */
+.table-hover:has(tbody tr:last-child:hover) {
+  border-bottom: none !important;
+}
+
+th {
+  position: sticky !important;
+  top: 0px;
+  font-weight: bold;
+  background-color: var(--fzj-color-blue);
+  border-color: var(--fzj-color-blue) !important;
+  color: #fff;
+  text-align: center !important;
+}
+
+th input {
+  width:100%;
+  font-size: 0.9em;
+}
+
+th input:not(:placeholder-shown) {
+  background-color: var(--fzj-color-green);
+}
+
+/* Table on Live view */
+#main_content table#jobs thead th {
+  top: 0px;
+}
+
+tr.filter th, tr.aggregate th {
+  background-color: #ccc;
+  color: #000;
+  border: none;
+  font-weight: normal;
+}
+
+.filtermessage {
+  display: table;
+  justify-self: start;
+  width: calc(100vw - 30px);
+  text-align: center;
+}
+
+td, th {
+  white-space: nowrap;
+}
+
+th.desc span::before {
+  content: "\f078";
+}
+
+th.asc span::before {
+  content: "\f077";
+}
+
+th span {
+  padding-left: .1rem;
+}
+
+.table-sm td, .table-sm th {
+  padding: .1rem; 
+  vertical-align: middle;
+}
+
+.tooltip-inner {
+  text-align: left;
+}
+
+.monospace {
+  font-family: monospace, 'Liberation Mono', 'Courier New';
+}
+
+.corepattern {
+  font-family: CorePattern; 
+  font-size: 1.5em;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  text-align: center !important;
+}
+
+/* Footer layout */
+footer.container-fluid {
+  position: absolute;
+  padding: 0px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  height: 0; /* default size 0 while things are loading, before auto resizing */
+}
+
+#footer_infoline_page_options > * {
+  z-index: 2;
+  position: relative;
+}
+
+#footer_infoline > #dragger {
+  position: absolute;
+  z-index: 1;
+  width: 100vw;
+  left: 0;
+  top: 0;
+  cursor: grab;
+}
+#footer_infoline > #dragger:active {
+  cursor: grabbing;
+}
+#footer_infoline > #dragger > #dragger_grip {
+  position: absolute;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  top: calc(50% - 18px / 2);
+  fill: #555;
+}
+
+#footer_infoline {
+  background: #ddd;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  padding: 0px 30px;
+}
+
+#footer_content, #footer_graphs {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+
+#footer_graphs {
+  padding: 0 1.7rem;
+  margin-bottom: 50px;
+}
+
+#footer_footer {
+  position: fixed;
+  bottom: 0;
+  background-color: var(--fzj-color-blue);
+  color: #ddd !important;
+  padding: 0px 15px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  z-index: 100;
+}
+
+#footer_footer a {
+  color: var(--fzj-color-lightblue);
+}
+
+#graph_selection ul {
+  margin: 0px;
+  /* padding: 0px; */
+  text-align: left;
+  padding-right: 15px;
+  padding-left: 15px;  
+  padding-bottom: 5px;  
+}
+
+#graph_selection li {
+  display: inline-block;
+  /* margin-right: 0.5em; */
+  background-color: #eee;
+  border: 1px solid #bbb;
+  border-top: 0;
+  border-radius: 0rem 0rem 0.3rem 0.3rem;
+  list-style-type: none;
+}
+
+#graph_selection li.active {
+  background-color: #bbb;
+  border: 1px solid #000;
+  font-weight: bold;
+  border-top: 0;
+  border-radius: 0rem 0rem 0.3rem 0.3rem;
+}
+
+#graph_selection li:hover {
+  background-color: #ccc;
+}
+
+#graph_selection li a {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  color: #000;
+}
+
+#graph_selection li a:hover { 
+  text-decoration: none; 
+}
+
+#graphs {
+  display: flex;
+  padding-right: 1em;
+  padding-top: 5px;
+  border-bottom: 1px solid #bbb;
+  flex-grow: 1;
+  min-height: 75px; /* footer_footer + footer_infoline */
+}
+
+.footer_graph {
+  flex-grow: 1;
+}
+
+.mermaid {
+  margin: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex: 0.25;
+  .hoverinfo {
+    margin-top: 30px;
+    position: relative;
+    table {
+      padding: 5px 15px;
+      border: 1px solid #444444;
+      border-radius: 3px;  
+      td:nth-child(1) {
+        width: 1%;
+        white-space: nowrap;
+        padding-right: 10px;
+      }
+      td {
+        font-size: 0.75cqw;
+      }
+    }
+    .close-btn {
+      position: absolute;
+      top: -5px;
+      right: 3px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: #000;
+    }
+  }
+  .calendar {
+    margin-top: 30px;
+    align-self: center;
+    width: 90% !important;
+    .ui-datepicker {
+      width: 100% !important;
+    }
+  }  
+}
+
+.system_graph {
+  padding: 0;
+  height: 15rem; 
+  flex: 1;
+}
+
+.graph_row {
+  margin: 0 !important;
+}
+
+#colorscale_selection > div, #colorscale_selection > div > * {
+  margin: 0 !important;
+  text-align: center;
+}
+#colorscale_selection svg {
+  margin-bottom: 3px;
+}
+.dropdown-item.selected {
+  background-color: #bbb !important;
+}
+
+.footer_graph_legend_kontview {
+  font-size: 0.6rem;
+  background-color: white;	/* #e7e7e7 */
+}
+
+.footer_graph_legend_kontview tr.active {
+  font-weight: bold;
+}
+
+#footer_infoline_page_options span, #footer_infoline_page_options a, #footer_infoline_page_options div {
+  margin-left: 1rem;
+}
+
+#footer_infoline_page_options .dropup a {
+  margin-left: 0rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+#footer_infoline_page_options .dropup label {
+  cursor: pointer;
+}
+
+#footer_infoline_page_options div.dropup {
+  display: inline-block;
+}
+
+#footer_infoline_page_options div.dropup:hover {
+  background-color: #e7e7e7;
+}
+
+#footer_infoline_page_options a span {
+  margin-left: 0rem;
+}
+
+/* Element specific layout */
+#tabs_scroll {
+  position: sticky;
+  /* overflow-x:auto; */
+  overflow-y: hidden;
+  top: -10px;
+  background-color: #fff;
+  transform: rotateX(180deg); 
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 10px; /* This padding is actually at the top, since it si flipped */
+}
+
+#tabs {
+  transform: rotateX(180deg); 
+  white-space: nowrap;
+  font-size: 0.7rem;
+  margin-left: 1px;
+}
+
+/* tabs: make each link look like a tab */
+#tabs a {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;        /* a bit more comfortable padding */
+  line-height: 1rem;
+  text-decoration: none;
+  color: #333;
+  background: #f5f6f7;           /* light gray tab face */
+  border: 1px solid #cfcfcf;     /* subtle gray border */
+  border-bottom-color: #bfbfbf;  /* slightly darker bottom edge */
+  border-radius: 0.3rem 0.3rem 0 0; /* rounded top corners only */
+  position: relative;
+  margin-bottom: -1px;           /* pull up to overlap content edge like a tab */
+  box-shadow: none;
+  transition: background .15s ease;
+}
+
+#tabs span {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  line-height: 1rem;
+  text-decoration: none;
+  color: #333;
+  background: #ffffff;
+  border: none;
+  position: relative;
+  margin-bottom: -1px;
+  box-shadow: none;
+}
+
+
+
+/* non-active hover state */
+#tabs a:not(.active):hover {
+  background: #e9eaeb;
+}
+
+/* active tab: blue, sits above the other tabs and has no bottom border so it merges with content */
+#tabs a.active {
+  font-weight: bold;
+  background-color: var(--fzj-color-blue);
+  color: #ffffff;
+  border-color: var(--fzj-color-blue);
+  border-bottom-color: transparent; /* visually merges with content below */
+  z-index: 2;                         /* sit above neighbouring tabs */
+  margin-bottom: 0;                   /* not pulled up — sits flush with content */
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+}
+
+
+#graphdiv_io_selector a {
+  margin-left: 0.6rem;
+}
+
+#graphdiv_io_selector a.active {
+  font-weight: bold;
+}
+
+#graphdiv_job_id, #graphdiv_type, #graphdiv_queue, #graphdiv_max_size, #graph_info {
+  font-size: 0.8rem;
+  margin: auto 0;
+}
+
+#graphdiv_budget,#graphdiv_project,#graphdiv_system,#graphdiv_filesystem {
+  background-color: var(--fzj-color-blue);
+  color: #ffffff;
+  font-size: 0.7rem;
+}

@@ -1,0 +1,59 @@
+# Copyright (c) 2023 Forschungszentrum Juelich GmbH.
+# This file is part of LLview. 
+#
+# This is an open source software distributed under the GPLv3 license. More information see the LICENSE file at the top level.
+#
+# Contributions must follow the Contributor License Agreement. More information see the CONTRIBUTING.md file at the top level.
+#
+# Contributors:
+#    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
+
+# System name
+export LLVIEW_SYSTEMNAME="system"
+
+# Folder locations
+export LLVIEW_HOME="/Server/LLview"
+export LLVIEW_DATA="/data"
+export LLVIEW_CONF="/Server/configs"
+
+# Shared folder between Remote and Server (same as $LLVIEW_SHARED in .llview_remote_rc)
+export LLVIEW_SHARED="/shared/remote_server"
+
+# Shutdown signal file
+export LLVIEW_SHUTDOWN="$HOME/HALT_ALL"
+
+# How many days logs should be kept, apart from current day (default: 1)
+export LLVIEW_LOG_DAYS=2
+
+# Number of processors used by JuRepTool (0 to turn off)
+export JUREPTOOL_NPROCS=1
+
+# Folder on the webserver that is shared on the web (necessary for the definition of the .htgroups)
+export LLVIEW_WEB_DATA="/shared/server_web"
+
+# Image to be used on the login page, relative to DocumentRoot (starting with /) 
+# or relative to $LLVIEW_WEB_DATA (default: img/$LLVIEW_SYSTEMNAME.jpg)
+#export LLVIEW_WEB_IMAGE=""
+
+# Exporting llview scripts folder to PATH
+export PATH="$PATH:$LLVIEW_HOME/scripts"
+
+# PERL5 definitions
+# module load Perl
+# module load Perl-bundle-CPAN
+export PATH="/opt/perl5/bin:${PATH}"
+export PERL5LIB="/opt/perl5/lib/perl5"
+export PERL_LOCAL_LIB_ROOT="/opt/perl5"
+export PERL_MB_OPT="--install_base \"/opt/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=/opt/perl5"
+export PERL5LIB="/opt/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+
+# Python definitions
+# module load Python
+# module load PyYAML
+
+# It is important to set the PYTHON variable to use the version with the dependencies of JuRepTool satisfied
+export PYTHON="python3.9"
+
+# Location of this file to be monitored for changes
+export LLVIEW_CONF_FILE="~/"

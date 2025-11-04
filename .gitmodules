@@ -1,0 +1,6 @@
+[submodule "shared/JURI"]
+	path = shared/JURI
+	url = https://github.com/FZJ-JSC/JURI
+[submodule "shared/llview_install/LLView"]
+	path = shared/llview_install/LLView
+	url = https://github.com/FZJ-JSC/LLview

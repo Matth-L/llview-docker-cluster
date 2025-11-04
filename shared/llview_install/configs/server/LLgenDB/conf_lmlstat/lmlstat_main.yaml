@@ -1,0 +1,5 @@
+paths:
+  outputdir: './lmlstat'
+
+datafiles:
+  %include "./lmlstat_datafiles_clientlml.yaml"

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lml:lgui>
+  <objects>
+    <object id="M1" name="userA" type="mentormap"/>
+    <object id="M2" name="userC" type="mentormap"/>
+    <object id="Q1" name="userA_L" type="pipamap"/>
+    <object id="Q2" name="userB_A" type="pipamap"/>
+    <object id="Q3" name="userC_L" type="pipamap"/>
+    <object id="U1" name="userA" type="usermap"/>
+    <object id="U2" name="userB" type="usermap"/>
+    <object id="U3" name="userC" type="usermap"/>
+    <object id="S1" name="userA" type="supportmap"/>
+  </objects>
+  <information>
+    <info oid="M1" type="short">
+      <data key="id" value="userA"/>
+      <data key="projects" value="project1"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userA"/>
+    </info>
+    <info oid="M2" type="short">
+      <data key="id" value="userC"/>
+      <data key="projects" value="project2"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userC"/>
+    </info>
+    <info oid="Q1" type="short">
+      <data key="id" value="userA"/>
+      <data key="projects" value="project1"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userA"/>
+      <data key="kind" value="L"/>
+    </info>
+    <info oid="Q2" type="short">
+      <data key="id" value="userB"/>
+      <data key="projects" value="project2"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userB"/>
+      <data key="kind" value="A"/>
+    </info>
+    <info oid="Q3" type="short">
+      <data key="id" value="userC"/>
+      <data key="projects" value="project2,project3"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userC"/>
+      <data key="kind" value="L"/>
+    </info>
+    <info oid="U1" type="short">
+      <data key="id" value="userA"/>
+      <data key="projects" value="project1"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userA"/>
+    </info>
+    <info oid="U2" type="short">
+      <data key="id" value="userB"/>
+      <data key="projects" value="project1,project2"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userB"/>
+    </info>
+    <info oid="U3" type="short">
+      <data key="id" value="userC"/>
+      <data key="projects" value="project1,project2,project3"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userC"/>
+    </info>
+    <info oid="S1" type="short">
+      <data key="id" value="userA"/>
+      <data key="ts" value="1707592470"/>
+      <data key="wsaccount" value="userA"/>
+    </info>
+  </information>
+</lml:lgui>

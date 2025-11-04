@@ -1,0 +1,42 @@
+{
+    "table": {
+        "scripts": ["table_sort.js", "table_filter.js", "table_download.js"],
+        "functions": ["set_filter", "set_initial_sort", "enable_table_download", "add_column_css"]
+    },
+    "history": {
+        "scripts": ["table_sort.js", "table_filter.js", "table_download.js", "joblist_history.js"],
+        "functions": ["set_filter", "set_initial_sort", "enable_table_download", "add_column_css", "init_dates"]
+    },
+    "llview": {
+        "scripts": ["table_sort.js", "llview.js"],
+        "functions": ["init_llview"],
+        "styles": ["llview.css"]
+    },
+    "graphs": {
+        "scripts": [["ext/dygraph.min.js", "ext/synchronizer.js"]],
+        "styles": ["ext/dygraph.css"],
+        "functions": ["init_graphs"]
+    },
+    "datatable": {
+        "scripts": ["setup_grid.js","table_sort.js", "table_filter.js", "table_download.js"],
+        "styles": ["grid.css"],
+        "functions": ["init_grid","set_filter", "set_initial_sort", "enable_table_download"]
+    },
+    "job_footer_graph": {
+        "scripts": [
+            ["ext/dygraph.min.js", "ext/synchronizer.js"],
+            ["footer_graph_generic.js", "footer_graph.js"]
+        ],
+        "styles": ["ext/dygraph.css"],
+        "functions": ["init_graphs", "add_job_event_handler"]
+    },
+    "job_footer_graph_gpu": {
+        "scripts": [
+            ["ext/dygraph.min.js", "ext/synchronizer.js"],
+            ["footer_graph_generic.js", "footer_graph_gpu.js"]
+        ],
+        "styles": ["ext/dygraph.css"],
+        "functions": ["init_graphs", "add_gpu_event_handler"]
+    }
+}
+
