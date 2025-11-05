@@ -73,7 +73,7 @@ databases:
   # #  DB for internal statitics of DB usage
   # %include "conf_internal/DBstat.yaml"
 
-  #  DB for internal statitics about workflow step timings
+  # #  DB for internal statitics about workflow step timings
   # %include "conf_internal/step_timings.yaml"
   # %include "conf_internal/transfer.yaml"
 

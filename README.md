@@ -23,7 +23,7 @@ docker- compose up -d
 ./scripts/rerun.sh
 ```
 
-LLView is available here : http://localhost:8080.
+LLView is available here : http://localhost:8080. (Wait a bit for the data to fill the server web, when `/shared/server_web/data` starts to fill access the website).
 
 # How everything works
 

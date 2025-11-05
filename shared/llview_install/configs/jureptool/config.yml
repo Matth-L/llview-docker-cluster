@@ -15,7 +15,8 @@ timezone: 'Europe/Berlin'
 # Substitutions can be used with keys given in #(...)#. Inside it:
 # - replace can be done with: [string_from,string_to]
 # - removals can be done with: (string_to_remove)
-hostname: 'http://localhost:8080/'
+# hostname: 'https://llview.fz-juelich.de/#system(-dc)[ ,_]#'
+hostname: 'http:localhost:8080/#system-compute#'
 
 #Folder prefix to be added to items in plotlists file
 folder_prefix: '$LLVIEW_DATA/$LLVIEW_SYSTEMNAME/tmp/jobreport/data/'

@@ -23,7 +23,7 @@ prometheus:
   #
   # Or obtained via a function "get_user_pass" in module "credentials" (whoud be in PYTHONPATH)
   # in this case, use 
-  credentials: "none"
+  credentials: "module"
   # The following lines are then run:
   #
   #   from credentials import get_user_pass
@@ -64,88 +64,88 @@ prometheus:
         id: 'name'
         percore: 'percore'
 
-    # ibms:
-    #   LML: './ibms_LML.xml'
-    #   type: 'fbnode'
-    #   prefix: 'fb'
-    #   metrics:
-    #     fb_mbin:
-    #       query: 'sum by (instance) (irate(node_infiniband_port_data_received_bytes_total{job="node-compute"}[10m]))'
-    #       factor: 0.000000953674316 # 1/1024/1024
-    #       default: 0
-    #     fb_mbout:
-    #       query: 'sum by (instance) (irate(node_infiniband_port_data_transmitted_bytes_total{job="node-compute"}[10m]))'
-    #       factor: 0.000000953674316 # 1/1024/1024
-    #       default: 0
-    #     fb_pckin:
-    #       query: 'sum by (instance) (irate(node_infiniband_port_packets_received_total{job="node-compute"}[10m]))'
-    #       default: 0
-    #     fb_pckout:
-    #       query: 'sum by (instance) (irate(node_infiniband_port_packets_transmitted_total{job="node-compute"}[10m]))'
-    #       default: 0
+    ibms:
+      LML: './ibms_LML.xml'
+      type: 'fbnode'
+      prefix: 'fb'
+      metrics:
+        fb_mbin:
+          query: 'sum by (instance) (irate(node_infiniband_port_data_received_bytes_total{job="node-compute"}[10m]))'
+          factor: 0.000000953674316 # 1/1024/1024
+          default: 0
+        fb_mbout:
+          query: 'sum by (instance) (irate(node_infiniband_port_data_transmitted_bytes_total{job="node-compute"}[10m]))'
+          factor: 0.000000953674316 # 1/1024/1024
+          default: 0
+        fb_pckin:
+          query: 'sum by (instance) (irate(node_infiniband_port_packets_received_total{job="node-compute"}[10m]))'
+          default: 0
+        fb_pckout:
+          query: 'sum by (instance) (irate(node_infiniband_port_packets_transmitted_total{job="node-compute"}[10m]))'
+          default: 0
 
-    # gpu:
-    #   LML: './gpus_LML.xml'
-    #   type: 'node'
-    #   prefix: 'gpu'
-    #   metrics:
-    #     # node_up:
-    #     #   query: 'sum by(instance) (up{job="node-compute"})'
-    #     # dcgm_up:
-    #     #   query: 'sum by(instance) (up{job="dcgm"})'
-    #     gpu_util: 
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_GPU_UTIL)'
-    #       default: 0
-    #     gpu_active:
-    #       query: 'sum by(instance,device) (DCGM_FI_PROF_SM_ACTIVE)'
-    #       default: 0
-    #     gpu_temp:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_GPU_TEMP)'
-    #       default: 0
-    #     gpu_sclk:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_SM_CLOCK)'
-    #       default: 0
-    #     gpu_pu:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_POWER_USAGE)'
-    #       factor: 1000.0
-    #       default: 0
-    #     gpu_clk:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_MEM_CLOCK)'
-    #       default: 0
-    #     gpu_memu:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_FB_USED)'
-    #       factor: 1048576 # 1*1024*1024
-    #       default: 0
-    #     gpu_memf:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_FB_FREE)'
-    #       factor: 1048576 # 1*1024*1024
-    #       default: 0
-    #     gpu_memur:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_MEM_COPY_UTIL)'
-    #       default: 0
-    #     gpu_memt:
-    #       default: 41943040 # 40GB*1024*1024
-    #     ncores:
-    #       default: 4992 # Value to be used on LLview client
-    #     gpu_clkr:
-    #       query: 'sum by(instance,device) (DCGM_FI_DEV_CLOCK_THROTTLE_REASONS)'
-    #       default: 0
-    #     pcierx:
-    #       query: 'sum by(instance,device) (DCGM_FI_PROF_PCIE_RX_BYTES)'
-    #       factor: 0.0009765625 # 1/1024.0
-    #       default: 0
-    #     pcietx:
-    #       query: 'sum by(instance,device) (DCGM_FI_PROF_PCIE_TX_BYTES)'
-    #       factor: 0.0009765625 # 1/1024.0
-    #       default: 0
-    #     nvlinkrx:
-    #       query: 'sum by(instance,device) (DCGM_FI_PROF_NVLINK_RX_BYTES)'
-    #       factor: 0.0009765625 # 1/1024.0
-    #       default: 0
-    #     nvlinktx:
-    #       query: 'sum by(instance,device) (DCGM_FI_PROF_NVLINK_TX_BYTES)'
-    #       factor: 0.0009765625 # 1/1024.0
-    #       default: 0
+    gpu:
+      LML: './gpus_LML.xml'
+      type: 'node'
+      prefix: 'gpu'
+      metrics:
+        # node_up:
+        #   query: 'sum by(instance) (up{job="node-compute"})'
+        # dcgm_up:
+        #   query: 'sum by(instance) (up{job="dcgm"})'
+        gpu_util: 
+          query: 'sum by(instance,device) (DCGM_FI_DEV_GPU_UTIL)'
+          default: 0
+        gpu_active:
+          query: 'sum by(instance,device) (DCGM_FI_PROF_SM_ACTIVE)'
+          default: 0
+        gpu_temp:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_GPU_TEMP)'
+          default: 0
+        gpu_sclk:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_SM_CLOCK)'
+          default: 0
+        gpu_pu:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_POWER_USAGE)'
+          factor: 1000.0
+          default: 0
+        gpu_clk:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_MEM_CLOCK)'
+          default: 0
+        gpu_memu:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_FB_USED)'
+          factor: 1048576 # 1*1024*1024
+          default: 0
+        gpu_memf:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_FB_FREE)'
+          factor: 1048576 # 1*1024*1024
+          default: 0
+        gpu_memur:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_MEM_COPY_UTIL)'
+          default: 0
+        gpu_memt:
+          default: 41943040 # 40GB*1024*1024
+        ncores:
+          default: 4992 # Value to be used on LLview client
+        gpu_clkr:
+          query: 'sum by(instance,device) (DCGM_FI_DEV_CLOCK_THROTTLE_REASONS)'
+          default: 0
+        pcierx:
+          query: 'sum by(instance,device) (DCGM_FI_PROF_PCIE_RX_BYTES)'
+          factor: 0.0009765625 # 1/1024.0
+          default: 0
+        pcietx:
+          query: 'sum by(instance,device) (DCGM_FI_PROF_PCIE_TX_BYTES)'
+          factor: 0.0009765625 # 1/1024.0
+          default: 0
+        nvlinkrx:
+          query: 'sum by(instance,device) (DCGM_FI_PROF_NVLINK_RX_BYTES)'
+          factor: 0.0009765625 # 1/1024.0
+          default: 0
+        nvlinktx:
+          query: 'sum by(instance,device) (DCGM_FI_PROF_NVLINK_TX_BYTES)'
+          factor: 0.0009765625 # 1/1024.0
+          default: 0
 
     loadmem:
       LML: './loadmem_LML.xml'

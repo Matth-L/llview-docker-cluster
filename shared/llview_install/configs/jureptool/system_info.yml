@@ -8,6 +8,7 @@
 # Contributors:
 #    Filipe Guimarães (Forschungszentrum Juelich GmbH) 
 
-SYSTEM: 
+SYSTEM:
   compute:
-    cores: 1
+    cores: 3
+    mem: 1000

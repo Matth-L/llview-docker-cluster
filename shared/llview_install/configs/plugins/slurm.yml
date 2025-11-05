@@ -55,7 +55,7 @@ nodeinfo:
   #   - 'jrc000.*'
   #   - 'jrc020.*'
   mem_reserved: # The systemname has to be given as a key here, if the mem_reserved is to be used
-    system: 8000 # Value that does not give negative numbers in any node,
+    system: 1000 # Value that does not give negative numbers in any node,
   modify_before_mapping:
     State: modify_state
     CPULoad: modify_load
