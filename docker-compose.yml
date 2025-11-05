@@ -1,3 +1,29 @@
+# COMPUTE NODE TEMPLATE
+x-compute-node: &compute
+  image : slurm-docker-cluster
+  command: slurmd
+  mem_limit: 1g
+  privileged: true
+  volumes:
+    - etc_munge:/etc/munge
+    - var_log_slurm:/var/log/slurm
+    - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
+    - ./shared/compute:/shared/compute
+  expose:
+    - "6818"
+  depends_on:
+    - "slurmctld"
+  networks:
+    - slurm-network
+  environment: # fix dbus
+    - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+
+################################################################################
+################################################################################
+### SERVICES
+################################################################################
+################################################################################
+
 services:
   mysql:
     image: mariadb
@@ -55,7 +81,6 @@ services:
     networks:
       - slurm-network
 
-
 # The server part -> where the metrics are stored by LLView using a Sqlite3 DB
   server:
     image: server
@@ -105,79 +130,28 @@ services:
 
   ############################################################################
   ############################################################################
-  ############################################################################
   ##### COMPUTE NODE
   ##### c1 & c2 & c3 are the compute node, nothings happens there
   ##### except running the jobs set using the /scripts/launch_job.sh
   ############################################################################
   ############################################################################
-  ############################################################################
   c1:
-    image: slurm-docker-cluster
-    command: slurmd
+    << : *compute
     hostname: c1
     container_name: c1
     cpuset : "1"
-    mem_limit: 1g
-    privileged: true
-    volumes:
-      - etc_munge:/etc/munge
-      - var_log_slurm:/var/log/slurm
-      - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
-      - ./shared/compute:/shared/compute
-    expose:
-      - "6818"
-    depends_on:
-      - "slurmctld"
-    networks:
-      - slurm-network
-    environment: # fix dbus
-      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
   c2:
-    image: slurm-docker-cluster
-    command: slurmd
+    << : *compute
     hostname: c2
     container_name: c2
     cpuset : "2"
-    mem_limit: 1g
-    privileged: true
-    volumes:
-      - etc_munge:/etc/munge
-      - var_log_slurm:/var/log/slurm
-      - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
-      - ./shared/compute:/shared/compute
-    expose:
-      - "6818"
-    depends_on:
-      - "slurmctld"
-    networks:
-      - slurm-network
-    environment: # fix dbus
-      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
-
 
   c3:
-    image: slurm-docker-cluster
-    command: slurmd
+    << : *compute
     hostname: c3
     container_name: c3
     cpuset : "3"
-    mem_limit: 1g
-    privileged: true
-    volumes:
-      - etc_munge:/etc/munge
-      - var_log_slurm:/var/log/slurm
-      - /run/dbus/system_bus_socket:/host/run/dbus/system_bus_socket # fix dbus
-      - ./shared/compute:/shared/compute
-    expose:
-      - "6818"
-    depends_on:
-      - "slurmctld"
-    networks:
-      - slurm-network
-    environment: # fix dbus
-      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
 volumes:
   etc_munge:
