@@ -8,6 +8,11 @@ The goal was to create a basic cluster, and install the julich tool named LLView
 
 **Made during my intership at CEA.**
 
+# Requirements
+
+- Docker >= 28.5.1 (lower version might works, not tested)
+- At least 4 CPUs
+
 # Quickstart
 
 Building all the image (The build time is long) :
