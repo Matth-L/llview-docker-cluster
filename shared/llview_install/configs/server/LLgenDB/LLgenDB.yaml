@@ -53,8 +53,8 @@ databases:
   # per core info
   %include "conf_cpu/pcpucores.yaml"
 
-  # interconnect map info
-  %include "conf_fabric/icmap.yaml"
+  # # interconnect map info
+  # %include "conf_fabric/icmap.yaml"
 
   # # interconnect info (fabric)
   # %include "conf_fabric/fabric.yaml"

@@ -62,9 +62,9 @@ logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/logs/monitor_jureptool`date +.%Y.%m
 # The generated file 'icnodemap_new.xml' has to be copied in the 'da_icmap' step of 'dbupdate' action
 # (which has to be activated)
 [icmap]
-active=1
-watchfile=${LLVIEW_CONF}/icmap
-execute="${PYTHON} ${LLVIEW_HOME}/da/utils/get_hostnodemap.py --map ${LLVIEW_CONF}/icmap --xml tmp/icnodemap_new.xml >> logs/icmap`date +.%Y.%m.%d`.log 2>> logs/icmap`date +.%Y.%m.%d`.errlog;"
+active=0
+watchfile=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/perm/icmap
+execute="${PYTHON} ${LLVIEW_HOME}/da/utils/get_hostnodemap.py --map perm/icmap --xml tmp/icnodemap_new.xml >> logs/icmap`date +.%Y.%m.%d`.log 2>> logs/icmap`date +.%Y.%m.%d`.errlog;"
 execdir=${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}
 logfile="${LLVIEW_DATA}/${LLVIEW_SYSTEMNAME}/logs/monitor_icmap`date +.%Y.%m.%d`.log"
 
