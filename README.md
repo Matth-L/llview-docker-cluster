@@ -18,8 +18,11 @@ docker build -t server --network=host ./docker/Server
 docker build -t web_server --network=host ./docker/Web
 ```
 
+> /!\ Manual step for now, go to `shared/LLView/da/rms/Prometheus/prometheus.py` and change `https` to `http` line 230 and 233.
+
 ```sh
 docker- compose up -d
+./scripts/register_cluster.sh
 ./scripts/rerun.sh
 ```
 
