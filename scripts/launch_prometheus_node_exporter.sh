@@ -15,5 +15,5 @@ log() {
 for compute_node in "${NODELIST[@]}"; do
     log "Launching prometheus node_exporter for $compute_node"
     docker exec $compute_node bash -c \
-    "./node_exporter-1.9.1.linux-amd64/node_exporter &"
+    "./node_exporter-1.9.1.linux-amd64/node_exporter --collector.cpu.info &"
 done

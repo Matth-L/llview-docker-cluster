@@ -29,7 +29,7 @@ prometheus:
     cores:
       LML: "./cores.percore_LML.xml"
       type: "coreinfo"
-      # regex: '^(.+):.*$'
+      regex: '^(.+):.*$'
       prefix: "ci"
       metrics:
         coreidle:
@@ -63,3 +63,20 @@ prometheus:
         cpuload:
           query: 'sum by (instance) (node_load1{job="node-compute"})'
           default: 0
+
+################################################################################
+## model_name -> .e.g "Intel (R)"
+################################################################################
+    model_name:
+      LML: "./model_cpu_LML.xml"
+      prefix: "mdcpu"
+      regex: '^(.+):.*$'
+      type: "node"
+      metrics:
+        model:
+          query: max by (instance, model_name) (node_cpu_info{job="node-compute"})
+          default: 0
+          cache: true
+      mapping:
+        md_ts: "md_ts"
+        model_name : "model_name"

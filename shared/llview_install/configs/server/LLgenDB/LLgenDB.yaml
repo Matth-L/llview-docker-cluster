@@ -50,6 +50,8 @@ databases:
   # load, memory, status of nodes 
   %include "conf_cpu/loadmem.yaml"
 
+  %include "conf_cpu/model.yaml"
+
   # per core info
   %include "conf_cpu/pcpucores.yaml"
 
