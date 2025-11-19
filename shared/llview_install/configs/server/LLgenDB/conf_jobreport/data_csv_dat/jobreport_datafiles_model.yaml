@@ -1,0 +1,31 @@
+- dataset:
+    name: model_dat
+    set:        model
+    FORALL:     'P,U,J:VAR_project_user_job'
+    filepath:   '$outputdir/projects/$P/$U/Model_${J}_node.dat'
+    columns:        'nodeid,ts,model'
+    column_convert: 'ts->todate_1'
+    column_filemap: 'J:jobid'
+    column_ts:      'ts'
+    format:         'dat'
+    format_str:      '%-10s %10d %20s'
+    data_database:   modelstate
+    data_table:      model
+    # mngt_actions:   'compress_finished_files,archive_jobs_files'
+    # renew:          'daily(13:46)'
+    # renew:          'always'
+
+- dataset:
+    name: model_csv
+    set:        model
+    FORALL:     'P,U,J:VAR_project_user_job'
+    filepath:   '$outputdir/projects/$P/$U/Model_${J}.csv'
+    columns:        'ts,model'
+    header:         'date,model'
+    column_convert: 'ts->todate_1'
+    column_filemap: 'J:jobid'
+    column_ts:      'ts'
+    format:         'csv'
+    data_database:   modelstate
+    data_table:      model
+    # mngt_actions:   'compress_finished_files,archive_jobs_files'

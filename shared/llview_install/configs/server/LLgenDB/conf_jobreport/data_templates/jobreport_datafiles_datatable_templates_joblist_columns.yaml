@@ -233,6 +233,13 @@
         valueFormatter: "(params) => round_number(params)",
         cellClass: "text-right",
         headerTooltip: "Maximum used memory by the job across all job nodes and over time (GiB)"
+      },
+      {
+        field : "model",
+        cellDataType: "text",
+        headerName: "Model",
+        headerTooltip: "Model name of the CPU used by the job",
+        valueFormatter: "(params) => params.value ? params.value : 'unknown'"
       }
     ]
   }

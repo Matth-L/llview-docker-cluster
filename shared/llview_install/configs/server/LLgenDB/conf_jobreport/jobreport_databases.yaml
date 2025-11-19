@@ -134,7 +134,9 @@ jobreport:
         - { name: currentwatts_max, type: float_t,          LLDB_from: loadmemstate/loadmem_aggr_by_jobid, LL_default: -1 }  
         - { name: cores_lastts,     type: ts_t,             LLDB_from: pcpucoresstate/pcpucores_aggr_jobid_avg, LLDB_from_lastts: yes, LL_default: -1    }
         - { name: cores_ndps,       type: count_t,          LLDB_from: pcpucoresstate/pcpucores_aggr_jobid_avg, LL_default: 0 }
-       
+
+        - { name : model, type: longstr_t, LLDB_from: modelstate/model, LL_default: "unknown-yaml" }
+
         - { name: falastts,        type: ts_t,              LLDB_from: fabricstate/fabric_aggr_by_jobid,   LLDB_from_lastts: yes, LL_default: -1 }
         - { name: fa_ndps,         type: count_t,           LLDB_from: fabricstate/fabric_aggr_by_jobid,   LL_default: 0 }
         - { name: mbin_avg,        type: mb_t,              LLDB_from: fabricstate/fabric_aggr_by_jobid,   LL_default: 0 }
@@ -524,7 +526,6 @@ jobreport:
           - { name: jmcfile,             type: filename_t, LL_default: '-' }
           - { name: pdffile,             type: filename_t, LL_default: '-' }
           - { name: htmlfile,            type: filename_t, LL_default: '-' }
-
   - table:
       name: pdffiles_reg
       options:

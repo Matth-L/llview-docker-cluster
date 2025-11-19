@@ -17,7 +17,7 @@ options:
 
 vars:
  %include "./jobreport_vars.yaml"
-    
+
 directories:
  - { path: "$outputdir/projects, $outputdir/support, $outputdir/config, 
             $outputdir/_info, $outputdir/sec_files, $outputdir/mentors,
@@ -44,6 +44,7 @@ directories:
 
 datafiles:
  %include "./data_csv_dat/jobreport_datafiles_loadmem.yaml"
+#  %include "./data_csv_dat/jobreport_datafiles_model.yaml"
  %include "./data_csv_dat/jobreport_datafiles_fabric.yaml"
  %include "./data_csv_dat/jobreport_datafiles_fsusage.yaml"
  %include "./data_csv_dat/jobreport_datafiles_gpu.yaml"

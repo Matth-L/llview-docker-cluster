@@ -1,4 +1,4 @@
-model:
+modelstate:
   tables:
     - table:
         name: model
@@ -12,4 +12,4 @@ model:
         columns:
           - { name: nodeid, type: nodeid_t, LML_from: id, LML_default: 'unknown' }
           - { name: ts,     type: ts_t,     LML_from: ts, LML_default: -1, LML_minlastinsert: mintsinserted }
-          - { name: model,  type: longstr_t, LML_from: model_name, LML_default: 'unknown' }
+          - { name: model,  type: longstr_t, LML_from: model_name, LML_default: 'unknown-db' }
