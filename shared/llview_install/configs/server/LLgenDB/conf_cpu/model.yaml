@@ -1,15 +1,56 @@
 modelstate:
   tables:
+    %include "../conf_common/jobmap_tables.yaml"
+    %include "../conf_common/nodeinfo_tables.yaml"
+
     - table:
         name: model
         options:
           update:
             LML: node
             mode: add
+          update_trigger:
+            - model_aggr_by_jobid
           archive:
             limit: max(ts)-25h
           index: nodeid,ts
         columns:
           - { name: nodeid, type: nodeid_t, LML_from: id, LML_default: 'unknown' }
           - { name: ts,     type: ts_t,     LML_from: ts, LML_default: -1, LML_minlastinsert: mintsinserted }
-          - { name: model,  type: longstr_t, LML_from: model_name, LML_default: 'unknown-db' }
+          - { name: model,  type: longstr_t, LML_from: model_name, LML_default: 'unknown-from-db' }
+
+    - table:
+        name: model_aggr_by_jobid
+        options:
+          update:
+            sql_update_contents:
+              vars: mintsinserted
+              sql: |
+                DELETE FROM model_aggr_by_jobid
+                WHERE jobid IN (
+                  SELECT DISTINCT jt.jobid
+                  FROM jobtsmap jt, jobnodemap jn, model m
+                  WHERE jt.ts >= mintsinserted AND jt.jobid = jn.jobid AND jn.nodeid = m.nodeid
+                );
+
+                INSERT INTO model_aggr_by_jobid
+                  (jobid, md_ndps, mdlastts, model)
+                SELECT
+                  jt.jobid,
+                  COUNT(DISTINCT m.nodeid) AS md_ndps,
+                  MAX(m.ts) AS mdlastts,
+                  GROUP_CONCAT(m.model, ', ') AS model
+                FROM jobtsmap jt, jobnodemap jn, model m
+                WHERE
+                  jt.ts >= mintsinserted AND
+                  jt.jobid = jn.jobid AND
+                  jn.nodeid = m.nodeid AND
+                  jt.ts = m.ts
+                GROUP BY jt.jobid;
+          archive:
+            limit: max(mdlastts)-25h
+        columns:
+          - { name: jobid,    type: jobid_t }
+          - { name: md_ndps,  type: count_t }
+          - { name: mdlastts, type: ts_t }
+          - { name: model,    type: longstr_t }
